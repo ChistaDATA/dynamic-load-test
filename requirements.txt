@@ -1,3 +1,4 @@
 locust
 pyyaml
 python-dotenv
+clickhouse_driver
