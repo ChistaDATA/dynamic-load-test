@@ -87,9 +87,10 @@ class WmtUser(ClickHouseUser):
         port = int(os.getenv("PORT"))
         username = os.getenv("USERNAME")
         password = os.getenv("PASSWORD")
+        task_file_name = os.getenv("TASK_FILE_NAME")
         self.client.connect(host, port, username, password)
 
-        self.load_tasks("tasks.yaml")
+        self.load_tasks(task_file_name)
 
     def load_tasks(self, filename):
         """Load tasks from the YAML file."""
@@ -105,7 +106,9 @@ class WmtUser(ClickHouseUser):
         for task_definition in tasks:
             task_name = task_definition.get("name")
             query = task_definition.get("query")
-            self.dynamic_tasks[task_name] = query
+            if task_name not in self.dynamic_tasks:
+                self.dynamic_tasks[task_name] = []
+            self.dynamic_tasks[task_name].append(query)
 
     @task
     def perform_dynamic_tasks(self):
@@ -114,8 +117,9 @@ class WmtUser(ClickHouseUser):
             logging.error("No tasks defined!")
             return
 
-        for name, query in self.dynamic_tasks.items():
-            self.client.execute(name, query)
+        for name, queries in self.dynamic_tasks.items():
+            for query in queries:
+                self.client.execute(name, query)
 
     def on_stop(self):
         self.client.disconnect()

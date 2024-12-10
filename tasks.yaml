@@ -1,5 +1,0 @@
-# Define your tasks below.
-# For detailed instructions, refer to the README.md file.
-
-- name: "get_dist_table_10"
-  query: "SELECT * from poc.dist_item_daily limit 10"

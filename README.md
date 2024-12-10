@@ -91,3 +91,16 @@ http://localhost:8089
 - **Ramp up(users started / second)**: Enter the rate at which new users will be spawned per second. For example, a hatch rate of 10 means that 10 new users will be created every second.
 
 
+## Running Locust with multiple workers
+To run Locust with multiple workers, use the following command:
+```shell
+locust -f locustfile.py --master
+```
+Then, start the worker nodes using the following commands in separate terminals.
+That way, each worker will be responsible for only a set of queries instead of all of them.
+```shell
+TASK_FILE_NAME=task01.yaml locust -f locustfile.py --worker
+TASK_FILE_NAME=task02.yaml locust -f locustfile.py --worker
+...
+TASK_FILE_NAME=task06.yaml locust -f locustfile.py --worker
+```
