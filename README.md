@@ -92,9 +92,9 @@ http://localhost:8089
 
 
 ## Running Locust with multiple workers
-To run Locust with multiple workers, use the following command:
+To run Locust with multiple workers, use the following command to start the master node:
 ```shell
-locust -f locustfile.py --master
+locust --master
 ```
 Then, start the worker nodes using the following commands in separate terminals.
 That way, each worker will be responsible for only a set of queries instead of all of them.
@@ -104,3 +104,9 @@ TASK_FILE_NAME=task02.yaml locust -f locustfile.py --worker
 ...
 TASK_FILE_NAME=task06.yaml locust -f locustfile.py --worker
 ```
+
+Another option to run Locust with multiple workers is to use the `task-file.list` file to specify the task files for each worker and run the following command to start the workers:
+```shell
+./start_workers.sh task-file.list
+```
+This will start one worker for each file in the task-file.list file and wait for them to finish.
